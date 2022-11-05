@@ -1,12 +1,9 @@
 class process:
-    StartTime = 0
-    ExecutingTime = 0
-    Deadline = -1
-    Priority = False
-
-    def __init__(self, StartTime, ExecutingTime, Deadline, Priority ):
+    def __init__(self, StartTime, ExecutingTime, Deadline, Priority, MemoryPages ):
         self.StartTime = StartTime
         self.ExecutingTime = ExecutingTime
         self.Deadline = Deadline
         self.Priority = Priority
+        self.MemoryPages = MemoryPages
+        self.MemorySize = 4 # mudar para 4098 ?
 
