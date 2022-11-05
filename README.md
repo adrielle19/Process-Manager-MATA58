@@ -14,7 +14,7 @@ tempos distintos para execução. Para cada processo, deve ser informado manualm
     o EDF
 ● Esse sistema deve implementar os algoritmos de substituição de páginas:
     o FIFO
-    o Menos Recentemente Utilizado
+    o Menos Recentemente Utilizado(LRU)
 Requisitos:
     ● Cada processo deve ter até 10 páginas (entrada do usuário). Cada página tem 4K de
     tamanho. A RAM tem 200 K de memória.
@@ -31,3 +31,5 @@ Requisitos:
     de execução)
     ● Colocar delay para verificar a execução
     - A linguagem de programação é de escolha do grupo.
+
+    - simulador exemplo : https://lotusoregano.itch.io/operational-system-escalonator
