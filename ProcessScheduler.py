@@ -168,7 +168,6 @@ class ProcessScheduler:
                     ExecutingProcess.ExecutionTimePerQuantum += 1
 
                     if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
-                            ExecutingProcess.Done = True
                             ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                             ExecutingProcess = None
                             ProcessCount -= 1        
