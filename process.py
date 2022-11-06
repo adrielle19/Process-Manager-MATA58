@@ -1,5 +1,6 @@
 class process:
-    def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0 ):
+    def __init__(self,ProcessId = 0, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0 ):
+        self.ProcessId = ProcessId
         self.StartTime = StartTime
         self.ExecutionTime = ExecutionTime
         self.ExecutedTime = 0
@@ -13,6 +14,7 @@ class process:
 
     def clone(self):
         proc = process()
+        proc.ProcessId = self.ProcessId
         proc.StartTime = self.StartTime
         proc.ExecutionTime = self.ExecutionTime
         proc.ExecutedTime = self.ExecutedTime
@@ -24,3 +26,11 @@ class process:
         proc.MemorySize = self.MemorySize
         proc.MetDeadline = self.MetDeadline
         return proc
+
+    def print_process(): #Inacabado (Rodrigo)
+        print(f"Chegada: {str(self.StartTime)}")
+        print(f"Job: {str(self.ExecutionTime)}")
+        print(f"Tempo executado: {str(self.ExecutedTime)}")
+        print(f"Tempo de Espera: {str(self.WaitTime)}")
+        print(f"ProcessCount: {str(self.ProcessCount)}")        
+        return

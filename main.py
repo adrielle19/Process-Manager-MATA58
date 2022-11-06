@@ -2,7 +2,7 @@ import numpy as np
 import tkinter as tk
 from tkinter import *
 
-import process
+import Process
 from func_main import *
 
 window = Tk()

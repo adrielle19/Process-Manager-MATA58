@@ -17,77 +17,89 @@ class ProcessScheduler:
 
     # Escalonamento
     def FIFO(self, ProcessArray):
-            WorkingArray = np.array([]) 
+        """This function implement the first in first out (FIFO) algorithm. 
+        It's a no preemptive algorithm in which the CPU executes in order the process that arrive.
 
-            for process in ProcessArray: # copia pq python é so por referencia
-                WorkingArray = np.append(WorkingArray, process.clone() )
+        Args:
+            ProcessArray (Array): An array containing all the process in the instantiated.
+        """
+        CopyArray = np.array([]) 
 
-            ReadyList = np.array(WorkingArray)
-            TotalTime = 0
-            ProcessCount = WorkingArray.size
-            ExecutingProcess = None
+        for process in ProcessArray: # copia pq python é so por referencia
+            CopyArray = np.append(CopyArray, process.clone() )
 
-            #execuçao dos processos
-            while ProcessCount != 0:
+        WorkingList = np.array(CopyArray) #List with process to be executed
+        TotalTime = 0
+        ProcessCount = CopyArray.size
+        ExecutingProcess = None #Process in execution
 
-                #Escolhe o proximo
-                if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
-                    for process in ReadyList:
-                        if process.StartTime <= TotalTime: # escolhe o primeiro caso alguem ja tenho chegado
-                            ExecutingProcess = process
-                            break
+        #execuçao dos processos
+        while ProcessCount != 0:
 
-                TotalTime += 1
-                print("Tempo atual:" + str(TotalTime))
+            #Escolhe o proximo
+            if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
+                for process in WorkingList:
+                    if process.StartTime <= TotalTime: # escolhe o primeiro caso alguem ja tenho chegado
+                        ExecutingProcess = process
+                        break
 
-                try:
-                    ExecutingProcess.ExecutedTime += 1
+            TotalTime += 1
+            print("Tempo atual:" + str(TotalTime))
 
-                    if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
-                            ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
-                            ExecutingProcess = None
-                            ProcessCount -= 1
-                except:
-                    pass
+            try:
+                ExecutingProcess.ExecutedTime += 1
 
-                #Tempo de espera para calculo de turnaround
-                for process in ReadyList:
-                    if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
-                        continue
-                    process.WaitTime += 1
+                if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
+                        WorkingList = np.delete(WorkingList, np.where(WorkingList == ExecutingProcess))
+                        ExecutingProcess = None
+                        ProcessCount -= 1
+            except:
+                pass
+
+            #Tempo de espera para calculo de turnaround
+            for process in WorkingList:
+                if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
+                    continue
+                process.WaitTime += 1
 
 
-                for process in WorkingArray:
-                    print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
-                print("----------------------------")
-            
-            print("TotalTime : ")
-            print(TotalTime)
-            print("----------------------------------")
-            
+            for process in CopyArray:
+                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+            print("----------------------------")
+        
+        print("TotalTime : ")
+        print(TotalTime)
+        print("----------------------------------")
+        
 
-            print("Turnaround : ")
-            print(self.TurnAround(WorkingArray))
-            print("----------------------------------")
-            return
+        print("Turnaround : ")
+        print(self.TurnAround(CopyArray))
+        print("----------------------------------")
+        return
 
 
     def Sjf(self, ProcessArray):
-        WorkingArray = np.array([]) 
+        """This function implement the shortest job first algorithm
+        It's a no preemptive algorithm in which the scheduler choses the process with the smallest execution time for the next execution.
+
+        Args:
+            ProcessArray (_type_): _description_
+        """
+        CopyArray = np.array([]) 
 
         for process in ProcessArray: # copia pq python é so por referencia
-            WorkingArray = np.append(WorkingArray, process.clone() )
+            CopyArray = np.append(CopyArray, process.clone() )
 
-        ReadyList = np.array(WorkingArray)
+        WorkingList = np.array(CopyArray)
         TotalTime = 0
-        ProcessCount = WorkingArray.size
+        ProcessCount = CopyArray.size
         ExecutingProcess = None
 
         #execuçao dos processos
         while ProcessCount != 0:
             #Escolhe o proximo
             if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
-                for process in ReadyList:
+                for process in WorkingList:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
@@ -102,19 +114,19 @@ class ProcessScheduler:
                 ExecutingProcess.ExecutedTime += 1
 
                 if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
-                        ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+                        WorkingList = np.delete(WorkingList, np.where(WorkingList == ExecutingProcess))
                         ExecutingProcess = None
                         ProcessCount -= 1
             except:
                 pass
             #Tempo de espera para calculo de turnaround
-            for process in ReadyList:
+            for process in WorkingList:
                 if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
                 process.WaitTime += 1
 
-
-            for process in WorkingArray:
+                
+            for process in CopyArray:
                 print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
             print("----------------------------")
         
@@ -122,13 +134,18 @@ class ProcessScheduler:
         print(TotalTime)
         print("----------------------------------")
         print("Turnaround : ")
-        print(self.TurnAround(WorkingArray))
+        print(self.TurnAround(CopyArray))
         print("----------------------------------")
         return
 
 
     def RoundRobin(self, ProcessArray):
-        
+        """This function implement the round robin algorithm
+        It's a preemptive algorithm in which time slices (quanta) are assigned to each process in equal portions and circular order.
+
+        Args:
+            ProcessArray (_type_): _description_
+        """
         WorkingArray = np.array([]) 
 
         for process in ProcessArray: # copia pq python é so por referencia
@@ -152,8 +169,6 @@ class ProcessScheduler:
                     ReadyList = np.append(ReadyList, process)
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
             
-
-
 
             if ExecutingProcess == None: # escolhe o primeiro dos prontos se nenhum estiver sendo executado
                 for process in ReadyList:
@@ -189,6 +204,7 @@ class ProcessScheduler:
                     process.WaitTime += 1
 
             else: # se o tempo do processo atual tiver acabdo
+                print("Overloading")
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess)) # coloca ele no fim da lista
                 ReadyList = np.append(ReadyList, ExecutingProcess)
 
@@ -218,6 +234,11 @@ class ProcessScheduler:
         return
 
     def Edf(self, ProcessArray):
+        """This function implement the earliest deadline first algorithm
+
+        Args:
+            ProcessArray (_type_): _description_
+        """
         WorkingArray = np.array([]) 
 
         for process in ProcessArray: # copia pq python é so por referencia
@@ -284,6 +305,7 @@ class ProcessScheduler:
                         continue
                     process.WaitTime += 1
             else:
+                print("Overloading")
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
                 for process in ReadyList:
@@ -311,23 +333,20 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
+ProcessA = Process.process(1,0,4,7,0,0)
+ProcessB = Process.process(2,2,2,3,0,0)
+ProcessC = Process.process(3,4,1,5,0,0)
+ProcessD = Process.process(4,6,3,10,0,0)
 
+ProcessA.print_process(ProcessA)
 
-if __name__ == "__main__":
-    ProcessA = Process.process(0,4,7,0,0)
-    ProcessB = Process.process(2,2,3,0,0)
-    ProcessC = Process.process(4,1,5,0,0)
-    ProcessD = Process.process(6,3,10,0,0)
+ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
 
+scheduler = ProcessScheduler(2 , 1)
 
-    ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+scheduler.FIFO(ProcessArray)
+#scheduler.Sjf(ProcessArray)
 
-    a = ProcessScheduler(2 , 1)
+# scheduler.RoundRobin(ProcessArray)
 
-    #a.FIFO(ProcessArray)
-
-    #a.Sjf(ProcessArray)
-
-    #a.RoundRobin(ProcessArray)
-
-    a.Edf(ProcessArray)
+#scheduler.Edf(ProcessArray)

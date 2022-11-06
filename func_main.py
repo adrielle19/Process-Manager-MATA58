@@ -17,6 +17,7 @@ def open_win(window,p,q,o):
         txt.place(x=150+j*300, y=15+((i+1-(j*10))*90))
         txt = Label(newWindow, text='Inicio do processo:')
         txt.place(x=100+j*300, y=50+((i+1-(j*10))*90))
+
         btn = Entry(newWindow,justify='center')
         btn.place(x=220+j*300, y=50+((i+1-(j*10))*90))
         counter+=1
