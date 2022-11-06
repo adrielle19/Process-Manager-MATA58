@@ -147,7 +147,7 @@ class ProcessScheduler:
         #execuçao dos processos
         while ProcessCount != 0:
 
-            for process in WorkingArray:
+            for process in WorkingArray: # so coloca na lista de prontos se já chegou
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
@@ -155,7 +155,7 @@ class ProcessScheduler:
 
 
 
-            if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
+            if ExecutingProcess == None: # escolhe o primeiro dos prontos se nenhum estiver sendo executado
                 for process in ReadyList:
                     ExecutingProcess = process
                     break
@@ -163,6 +163,7 @@ class ProcessScheduler:
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
 
+            # Executando
             if not Overloading:
                 try:
                     ExecutingProcess.ExecutedTime += 1
@@ -173,7 +174,7 @@ class ProcessScheduler:
                             ExecutingProcess = None
                             ProcessCount -= 1        
 
-                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum:
+                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum: # Chega se acabou o tempo dele 
                         ExecutingProcess.ExecutionTimePerQuantum = 0
                         print("Overloading")
                         Overloading = True        
@@ -186,15 +187,17 @@ class ProcessScheduler:
                     if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                         continue
                     process.WaitTime += 1
-            else:
-                ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+
+            else: # se o tempo do processo atual tiver acabdo
+                ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess)) # coloca ele no fim da lista
                 ReadyList = np.append(ReadyList, ExecutingProcess)
-                for process in ReadyList:
-                    if process.StartTime > TotalTime:#não conta se é o que ta execuntado ou ainda "não chegou"
+
+                for process in ReadyList:# aumento o overload para todos
+                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
                         continue
                     process.WaitTime += 1
                 OverloadTime -= 1
-                if OverloadTime == 0:
+                if OverloadTime <= 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
@@ -233,7 +236,7 @@ class ProcessScheduler:
         #execuçao dos processos
         while ProcessCount != 0:
 
-            for process in WorkingArray:
+            for process in WorkingArray:# so coloca na lista de prontos se já chegou
                 if process.StartTime <= TotalTime:
                     ReadyList = np.append(ReadyList, process)
                     WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
@@ -246,13 +249,14 @@ class ProcessScheduler:
                     if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
                         if ExecutingProcess == None: # escolhe o 1 para comparação
                             ExecutingProcess = process
-                        else: # encontra o com menor job dos que ja chegaram
+                        else: # encontra o deadline mais ceda dos que ja chegaram
                             if process.Deadline - (TotalTime - process.StartTime)  < ExecutingProcess.Deadline - (TotalTime - ExecutingProcess.StartTime):
                                 ExecutingProcess = process
 
             TotalTime += 1
             print("Tempo atual:" + str(TotalTime))
 
+            # Executando
             if not Overloading:
                 try:
                     ExecutingProcess.ExecutedTime += 1
@@ -266,7 +270,7 @@ class ProcessScheduler:
                             ExecutingProcess = None
                             ProcessCount -= 1        
 
-                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum:
+                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum:# Chega se acabou o tempo dele 
                         ExecutingProcess.ExecutionTimePerQuantum = 0
                         print("Overloading")
                         Overloading = True        
@@ -283,11 +287,11 @@ class ProcessScheduler:
                 ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
                 ReadyList = np.append(ReadyList, ExecutingProcess)
                 for process in ReadyList:
-                    if process.StartTime > TotalTime:#não conta se é o que ta execuntado ou ainda "não chegou"
+                    if process.StartTime > TotalTime:#não sei se é necessario mas ta funcionando com
                         continue
                     process.WaitTime += 1
                 OverloadTime -= 1
-                if OverloadTime == 0:
+                if OverloadTime == 0: # terminando overload
                     OverloadTime = self.Overload
                     ExecutingProcess = None
                     Overloading = False
