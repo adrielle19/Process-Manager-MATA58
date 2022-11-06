@@ -333,10 +333,10 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-ProcessA = Process.process(1,0,4,7,0,0)
-ProcessB = Process.process(2,2,2,3,0,0)
-ProcessC = Process.process(3,4,1,5,0,0)
-ProcessD = Process.process(4,6,3,10,0,0)
+ProcessA = Process.process(0,4,7,0,0)
+ProcessB = Process.process(2,2,3,0,0)
+ProcessC = Process.process(4,1,5,0,0)
+ProcessD = Process.process(6,3,10,0,0)
 
 ProcessA.print_process(ProcessA)
 
