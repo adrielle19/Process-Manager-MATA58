@@ -1,22 +1,21 @@
 class process:
-    StartTime = 0
-    ExecutingTime = 0
-    Deadline = -1
-    Priority = False
-
-    def __init__(self, StartTime, ExecutingTime, Deadline, Priority ):
+    def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0 ):
         self.StartTime = StartTime
-        self.ExecutingTime = ExecutingTime
+        self.ExecutionTime = ExecutionTime
         self.ExecutedTime = 0
+        self.ExecutionTimePerQuantum = 0
         self.WaitTime = 0
         self.Deadline = Deadline
         self.Priority = Priority
+        self.MemoryPages = MemoryPages
+        self.MemorySize = 4 # mudar para 4098 ?
 
     def clone(self):
         proc = process()
         proc.StartTime = self.StartTime
-        proc.ExecutingTime = self.ExecutingTime
+        proc.ExecutionTime = self.ExecutionTime
         proc.ExecutedTime = self.ExecutedTime
+        proc.ExecutionTimePerQuantum = self.ExecutionTimePerQuantum
         proc.WaitTime = self.WaitTime
         proc.Deadline = self.Deadline
         proc.Priority = self.Priority

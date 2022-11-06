@@ -1,4 +1,4 @@
-import process
+import Process
 import numpy as np
 
 class ProcessScheduler:
@@ -9,82 +9,69 @@ class ProcessScheduler:
         self.Quantum = Quantum
         self.Overload = Overload
 
+    def TurnAround(self, ProcessList):
+        Turnaround = 0
+        for process in ProcessList:
+            Turnaround += process.WaitTime + process.ExecutionTime
+        return Turnaround/ProcessList.size
 
     # Escalonamento
-    def FIFO(ProcessArray):
+    def FIFO(self, ProcessArray):
+            WorkingArray = np.array([]) 
 
-        WorkingArray = np.array([]) 
+            for process in ProcessArray: # copia pq python é so por referencia
+                WorkingArray = np.append(WorkingArray, process.clone() )
 
-        for process in ProcessArray: # copia pq python é so por referencia
-            WorkingArray = np.append(WorkingArray, process.clone() )
+            ReadyList = np.array(WorkingArray)
+            TotalTime = 0
+            ProcessCount = WorkingArray.size
+            ExecutingProcess = None
 
+            #execuçao dos processos
+            while ProcessCount != 0:
 
-        print("ProcessList por startime : ")
+                #Escolhe o proximo
+                if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
+                    for process in ReadyList:
+                        if process.StartTime <= TotalTime: # escolhe o primeiro caso alguem ja tenho chegado
+                            ExecutingProcess = process
+                            break
 
-        for process in WorkingArray:
-            print(process.StartTime)
-        print("----------------------------------")
+                TotalTime += 1
 
-        SortedList = np.array([])
+                try:
+                    ExecutingProcess.ExecutedTime += 1
 
-        # ordena valors por ordem de chegada. É n^2 ,podia ser quicksort para objetos em array mas fiquei com pregruiça 
-        # talvez nao necessario,
-        while WorkingArray.size != 0:
-            smallest = WorkingArray[0]
-            
-            for process in WorkingArray:
-                if process.StartTime < smallest.StartTime:
-                    smallest = process
-
-            WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == smallest))
-            SortedList = np.append(SortedList,smallest) 
-
-        print("SortedList por startime : ")
-        for process in SortedList:
-            print(process.StartTime)
-        print("----------------------------------")
-
-        TotalTime = 0
-        ReadyList = np.array([])
-
-        ProcessCount = SortedList.size
-
-        #execuçao dos processos
-        while ProcessCount != 0:
-            
-            #adiciona a lista de prontos caso o tempo de chegada seja menor que o de execuçao
-            for process in SortedList:
-                if process.StartTime <= TotalTime:
-                    ReadyList = np.append(ReadyList,process) 
-                    SortedList = np.delete(SortedList, 0)
-
-            #passagem de tempo para o 1° processo ja que é o fifo
-            TotalTime += 1
-            try:
-                ExectuingProcess = ReadyList[0]
-                ExectuingProcess.ExecutedTime += 1
-
-                #remove caso tenha terminado de ser executado
-                if ExectuingProcess.ExecutedTime == ExectuingProcess.ExecutingTime:
-                    ReadyList = np.delete(ReadyList, np.where(ReadyList == ExectuingProcess))
-                    ProcessCount -= 1
+                    if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
+                            ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+                            ExecutingProcess = None
+                            ProcessCount -= 1
+                except:
+                    pass
 
                 #Tempo de espera para calculo de turnaround
                 for process in ReadyList:
-                    if process == ExectuingProcess:
+                    if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                         continue
                     process.WaitTime += 1
-            except:
-                ExectuingProcess = None
 
+
+                for process in WorkingArray:
+                    print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+                print("----------------------------")
             
-        print("TotalTime : ")
-        print(TotalTime)
-        print("----------------------------------")
-        return
+            print("TotalTime : ")
+            print(TotalTime)
+            print("----------------------------------")
+            
+
+            print("Turnaround : ")
+            print(self.TurnAround(WorkingArray))
+            print("----------------------------------")
+            return
 
 
-    def Sjf(ProcessArray):
+    def Sjf(self, ProcessArray):
         WorkingArray = np.array([]) 
 
         for process in ProcessArray: # copia pq python é so por referencia
@@ -93,56 +80,159 @@ class ProcessScheduler:
         ReadyList = np.array(WorkingArray)
         TotalTime = 0
         ProcessCount = WorkingArray.size
-        ExectuingProcess = None
+        ExecutingProcess = None
 
         #execuçao dos processos
         while ProcessCount != 0:
             #Escolhe o proximo
-            for process in ReadyList:
-                if process.StartTime <= TotalTime and (not process.Done): # so escolhe o proximo caso alguem ja tenho chegado
-                    if ExectuingProcess == None:
-                        ExectuingProcess = process
-                    else:
-                        if process.ExecutingTime - process.ExecutedTime  < ExectuingProcess.ExecutingTime - ExectuingProcess.ExecutedTime:
-                            ExectuingProcess = process
+            if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
+                for process in ReadyList:
+                    if process.StartTime <= TotalTime : # so escolhe o proximo caso alguem ja tenho chegado
+                        if ExecutingProcess == None: # escolhe o 1 para comparação
+                            ExecutingProcess = process
+                        else: # encontra o com menor job dos que ja chegaram
+                            if process.ExecutionTime - process.ExecutedTime  < ExecutingProcess.ExecutionTime - ExecutingProcess.ExecutedTime:
+                                ExecutingProcess = process
 
             TotalTime += 1
-            try:
-                ExectuingProcess.ExecutedTime += 1
 
-                if ExectuingProcess.ExecutedTime == ExectuingProcess.ExecutingTime:
-                        ExectuingProcess.Done = True
-                        ReadyList = np.delete(ReadyList, np.where(ReadyList == ExectuingProcess))
-                        ExectuingProcess = None
+            try:
+                ExecutingProcess.ExecutedTime += 1
+
+                if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
+                        ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+                        ExecutingProcess = None
                         ProcessCount -= 1
             except:
                 pass
             #Tempo de espera para calculo de turnaround
             for process in ReadyList:
-                if (process == ExectuingProcess) or (process.StartTime >= TotalTime):
+                if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
                     continue
                 process.WaitTime += 1
 
 
             for process in WorkingArray:
-                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutingTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
             print("----------------------------")
         
         print("TotalTime : ")
         print(TotalTime)
         print("----------------------------------")
-        Turnaround = 0
-        for process in WorkingArray:
-            Turnaround += process.WaitTime + process.ExecutingTime
-
         print("Turnaround : ")
-        print(Turnaround/WorkingArray.size)
+        print(self.TurnAround(WorkingArray))
         print("----------------------------------")
         return
 
 
-    def RoundRobin():
+    def RoundRobin(self, ProcessArray):
+        
+        WorkingArray = np.array([]) 
+
+        for process in ProcessArray: # copia pq python é so por referencia
+            WorkingArray = np.append(WorkingArray, process.clone() )
+
+        CopyArray = np.array(WorkingArray)
+
+        ReadyList = np.array([])
+        TotalTime = 0
+        ProcessCount = WorkingArray.size
+        ExecutingProcess = None
+
+        Overloading = False
+        OverloadTime = self.Overload
+
+        i = 15
+        #execuçao dos processos
+        while i != 0:
+
+            for process in WorkingArray:
+                if process.StartTime <= TotalTime:
+                    ReadyList = np.append(ReadyList, process)
+                    WorkingArray = np.delete(WorkingArray, np.where(WorkingArray == process))
+            
+
+
+
+            if ExecutingProcess == None: # so escolhe o proximo se nenhum estiver sendo executado
+                for process in ReadyList:
+                    ExecutingProcess = process
+                    break
+
+            TotalTime += 1
+            print("Tempo atual:" + str(TotalTime))
+
+            if not Overloading:
+                try:
+                    ExecutingProcess.ExecutedTime += 1
+                    ExecutingProcess.ExecutionTimePerQuantum += 1
+
+                    if ExecutingProcess.ExecutedTime == ExecutingProcess.ExecutionTime: # Remove o processo caso tenha terminado
+                            ExecutingProcess.Done = True
+                            ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+                            ExecutingProcess = None
+                            ProcessCount -= 1        
+
+                    elif ExecutingProcess.ExecutionTimePerQuantum == self.Quantum:
+                        ExecutingProcess.ExecutionTimePerQuantum = 0
+                        print("Overloading")
+                        Overloading = True        
+
+                except:
+                    pass
+
+                #Tempo de espera para calculo de turnaround
+                for process in ReadyList:
+                    if (process == ExecutingProcess) or (process.StartTime >= TotalTime):#não conta se é o que ta execuntado ou ainda "não chegou"
+                        continue
+                    process.WaitTime += 1
+            else:
+                ReadyList = np.delete(ReadyList, np.where(ReadyList == ExecutingProcess))
+                ReadyList = np.append(ReadyList, ExecutingProcess)
+                for process in ReadyList:
+                    if process.StartTime > TotalTime:#não conta se é o que ta execuntado ou ainda "não chegou"
+                        continue
+                    process.WaitTime += 1
+                OverloadTime -= 1
+                if OverloadTime == 0:
+                    OverloadTime = self.Overload
+                    ExecutingProcess = None
+                    Overloading = False
+              
+            for process in CopyArray:
+                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+            print("----------------------------")
+
+            i -= 1
+        
+        print("TotalTime : ")
+        print(TotalTime)
+        print("----------------------------------")
+        
+
+        print("Turnaround : ")
+        print(self.TurnAround(CopyArray))
+        print("----------------------------------")
         return
 
     def Edf():
         return
+
+
+
+if __name__ == "__main__":
+    ProcessA = Process.process(0,4,7,1,0)
+    ProcessB = Process.process(2,2,5,0,0)
+    ProcessC = Process.process(4,1,8,0,0)
+    ProcessD = Process.process(6,3,10,0,0)
+
+
+    ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+
+    a = ProcessScheduler(2 , 1)
+
+    #a.FIFO(ProcessArray)
+
+    #a.Sjf(ProcessArray)
+
+    a.RoundRobin(ProcessArray)

@@ -35,10 +35,3 @@ btn1.place(x=200, y=280)
 
 
 window.mainloop()
-
-
-
-
-# ai enviou pra de rodrigo
-
-# 
