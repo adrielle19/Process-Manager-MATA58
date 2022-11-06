@@ -9,6 +9,7 @@ class process:
         self.Priority = Priority
         self.MemoryPages = MemoryPages
         self.MemorySize = 4 # mudar para 4098 ?
+        self.MetDeadline = True
 
     def clone(self):
         proc = process()
@@ -21,4 +22,5 @@ class process:
         proc.Priority = self.Priority
         proc.MemoryPages = self.MemoryPages
         proc.MemorySize = self.MemorySize
+        proc.MetDeadline = self.MetDeadline
         return proc
