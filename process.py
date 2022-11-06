@@ -1,6 +1,5 @@
 class process:
-    def __init__(self,ProcessId = 0, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0 ):
-        self.ProcessId = ProcessId
+    def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0, ProcessId = 0 )
         self.StartTime = StartTime
         self.ExecutionTime = ExecutionTime
         self.ExecutedTime = 0
@@ -8,6 +7,7 @@ class process:
         self.WaitTime = 0
         self.Deadline = Deadline
         self.Priority = Priority
+        self.ProcessId = ProcessId
         self.MemoryPages = MemoryPages
         self.MemorySize = 4 # mudar para 4098 ?
         self.MetDeadline = True
