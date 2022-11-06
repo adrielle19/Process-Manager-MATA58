@@ -1,26 +1,44 @@
 import numpy as np
-import pandas as pd
+import tkinter as tk
+from tkinter import *
 
-# Escalonamento
-def FifoProcesso():
-    return
+import process
+from func_main import *
 
-def Sjf():
-    return
+window = Tk()
+window.title('Escalonador de Processos e Memória')
+window.geometry("400x400")
 
-def RoundRobin():
-    return
+lbl1 = Label(window, text='Número de processos', anchor='center')
+lbl1.place(x=70, y=170)
+ent1 = Entry(justify='center')
+ent1.place(x=200, y=170)
+        
+lbl2 = Label(window, text='Quantum do sistema', anchor='center')
+lbl2.place(x=70, y=200)
+ent2 = Entry(justify='center')
+ent2.place(x=200, y=200)
 
-def Edf():
-    return
+lbl3 = Label(window, text='Sobrecarga do sistema', anchor='center')
+lbl3.place(x=70, y=230)
+ent3 = Entry(justify='center')
+ent3.place(x=200, y=230)
 
-# Substituição de paginas
-def FifoMemoria():
-    return
+def call_open():
+    p = int(ent1.get())
+    q = int(ent2.get())
+    o = int(ent3.get())
+    open_win(window,p,q,o)
 
-def Lrs():
-    return
+btn1 = Button(window,text ="Avançar",command = call_open)
+btn1.place(x=200, y=280)
 
 
-Quantum = input("Quantum do sistema: ")
-Sobrecarga = input("Sobrecarga do sistema: ")
+window.mainloop()
+
+
+
+
+# ai enviou pra de rodrigo
+
+# 
