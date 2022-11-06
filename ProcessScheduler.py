@@ -38,6 +38,7 @@ class ProcessScheduler:
                             break
 
                 TotalTime += 1
+                print("Tempo atual:" + str(TotalTime))
 
                 try:
                     ExecutingProcess.ExecutedTime += 1
@@ -95,6 +96,7 @@ class ProcessScheduler:
                                 ExecutingProcess = process
 
             TotalTime += 1
+            print("Tempo atual:" + str(TotalTime))
 
             try:
                 ExecutingProcess.ExecutedTime += 1
@@ -142,9 +144,8 @@ class ProcessScheduler:
         Overloading = False
         OverloadTime = self.Overload
 
-        i = 15
         #execuçao dos processos
-        while i != 0:
+        while ProcessCount != 0:
 
             for process in WorkingArray:
                 if process.StartTime <= TotalTime:
@@ -202,7 +203,6 @@ class ProcessScheduler:
                 print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
             print("----------------------------")
 
-            i -= 1
         
         print("TotalTime : ")
         print(TotalTime)
