@@ -64,7 +64,7 @@ class ProcessScheduler:
 
 
             for process in CopyArray:
-                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+                process.print_process()        
             print("----------------------------")
         
         print("TotalTime : ")
@@ -127,7 +127,7 @@ class ProcessScheduler:
 
                 
             for process in CopyArray:
-                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+                process.print_process()        
             print("----------------------------")
         
         print("TotalTime : ")
@@ -219,7 +219,7 @@ class ProcessScheduler:
                     Overloading = False
               
             for process in CopyArray:
-                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount))        
+                process.print_process()        
             print("----------------------------")
 
         
@@ -319,7 +319,7 @@ class ProcessScheduler:
                     Overloading = False
               
             for process in CopyArray:
-                print("Chegada: " +str(process.StartTime)+ " Job: " +str(process.ExecutionTime) + " Tempo executado : "+ str(process.ExecutedTime) + " Tempo de Espera : " + str(process.WaitTime) + " ProcessCount: " + str(ProcessCount) + ("   Estourou" if not process.MetDeadline else "") )        
+                process.print_process()        
             print("----------------------------")
 
         
@@ -333,12 +333,12 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-ProcessA = Process.process(0,4,7,0,0)
-ProcessB = Process.process(2,2,3,0,0)
-ProcessC = Process.process(4,1,5,0,0)
-ProcessD = Process.process(6,3,10,0,0)
+ProcessA = Process.process(0,4,7,0,0,1)
+ProcessB = Process.process(2,2,3,0,0,2)
+ProcessC = Process.process(4,1,5,0,0,3)
+ProcessD = Process.process(6,3,10,0,0,4)
 
-ProcessA.print_process(ProcessA)
+ProcessA.print_process()
 
 ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
 
@@ -347,6 +347,6 @@ scheduler = ProcessScheduler(2 , 1)
 scheduler.FIFO(ProcessArray)
 #scheduler.Sjf(ProcessArray)
 
-# scheduler.RoundRobin(ProcessArray)
+#scheduler.RoundRobin(ProcessArray)
 
 #scheduler.Edf(ProcessArray)

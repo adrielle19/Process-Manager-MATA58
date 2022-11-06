@@ -1,5 +1,5 @@
 class process:
-    def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0, ProcessId = 0 )
+    def __init__(self, StartTime = 0, ExecutionTime = 0, Deadline = 0, Priority = 0, MemoryPages = 0, ProcessId = 0 ):
         self.StartTime = StartTime
         self.ExecutionTime = ExecutionTime
         self.ExecutedTime = 0
@@ -27,10 +27,17 @@ class process:
         proc.MetDeadline = self.MetDeadline
         return proc
 
-    def print_process(): #Inacabado (Rodrigo)
-        print(f"Chegada: {str(self.StartTime)}")
-        print(f"Job: {str(self.ExecutionTime)}")
-        print(f"Tempo executado: {str(self.ExecutedTime)}")
-        print(f"Tempo de Espera: {str(self.WaitTime)}")
-        print(f"ProcessCount: {str(self.ProcessCount)}")        
+    def print_process(self):
+        # aqui da pra quebra linha
+        # no de baixo não
+        # qual usar ?(- Fernando)
+        print(  "ProcessId: " + str(self.ProcessId) +
+                " Chegada: " + str(self.StartTime) + 
+                " Job: " + str(self.ExecutionTime) + 
+                " Tempo executado : " + str(self.ExecutedTime) + 
+                " Tempo de Espera : " + str(self.WaitTime) + 
+                ("   Estourou Deadline" if not self.MetDeadline else "") )        
+
+        #print em uma linha
+        #print(f"Id: {str(self.ProcessId)} Chegada: {str(self.StartTime)} Job: {str(self.ExecutionTime)} Tempo executado: {str(self.ExecutedTime)} Tempo de Espera: {str(self.WaitTime)}")       
         return
