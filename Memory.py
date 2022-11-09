@@ -1,11 +1,13 @@
 import numpy as np
+import Pages
 class Memory:
     def __init__(self):
         self.PageSize = 4 # tamanho da pagina
         self.Space = 200 # tamanho total da memoria
-        self.PageList = np.zeros(50, dtype=int) # Array com cada pagina       
-        for i in range(50):
-            self.PageList[i] = -1 # -1 significa que ta vazia
+        Pages= []  
+        for Process in range(50):
+            Pages.append(Pages.Page(None))
+        self.PageList = np.array(Pages) # Array com cada pagina                   
         self.EmptyPagesNum = 50
 
     def clone(self):

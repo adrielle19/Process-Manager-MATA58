@@ -333,20 +333,23 @@ class ProcessScheduler:
         print("----------------------------------")
         return
 
-ProcessA = Process.process(0,4,7,0,0,1)
-ProcessB = Process.process(2,2,3,0,0,2)
-ProcessC = Process.process(4,1,5,0,0,3)
-ProcessD = Process.process(6,3,10,0,0,4)
 
-ProcessA.print_process()
+if __name__ == "__main__":
 
-ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+    ProcessA = Process.process(0,4,7,0,0,1)
+    ProcessB = Process.process(2,2,3,0,0,2)
+    ProcessC = Process.process(4,1,5,0,0,3)
+    ProcessD = Process.process(6,3,10,0,0,4)
 
-scheduler = ProcessScheduler(2 , 1)
+    ProcessA.print_process()
 
-scheduler.FIFO(ProcessArray)
-#scheduler.Sjf(ProcessArray)
+    ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
 
-#scheduler.RoundRobin(ProcessArray)
+    scheduler = ProcessScheduler(2 , 1)
 
-#scheduler.Edf(ProcessArray)
+    scheduler.FIFO(ProcessArray)
+    #scheduler.Sjf(ProcessArray)
+
+    #scheduler.RoundRobin(ProcessArray)
+
+    #scheduler.Edf(ProcessArray)

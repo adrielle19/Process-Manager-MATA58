@@ -1,4 +1,5 @@
 import numpy as np
+import Pages
 class VirtualMemory:
     def __init__(self, ProcessList):
         self.PageSize = 4 # tamanho da pagina
@@ -6,13 +7,11 @@ class VirtualMemory:
         # Cria as paginas na memoria virtual com o id do processo
         Pages= []  
         for Process in ProcessList:
-            print(Process.ProcessId)
             for i in range(Process.MemoryPages):
-                Pages.append(Process.ProcessId)
-        print(Pages)
+                Pages.append(Pages.VirtualPage(Process))
 
         self.Space = len(Pages)*4 # tamanho total da memoria
-        self.PageList = np.array(Pages, dtype=int) # Array com cada pagina
+        self.PageList = np.array(Pages) # Array com cada pagina
         
 
 
