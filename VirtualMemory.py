@@ -5,13 +5,13 @@ class VirtualMemory:
         self.PageSize = 4 # tamanho da pagina
 
         # Cria as paginas na memoria virtual com o id do processo
-        Pages= []  
+        Page= []  
         for Process in ProcessList:
             for i in range(Process.MemoryPages):
-                Pages.append(Pages.VirtualPage(Process))
+                Page.append(Pages.VirtualPage(Process))
 
-        self.Space = len(Pages)*4 # tamanho total da memoria
-        self.PageList = np.array(Pages) # Array com cada pagina
+        self.Space = len(Page)*4 # tamanho total da memoria
+        self.PageList = np.array(Page) # Array com cada pagina
         
 
 
@@ -21,3 +21,15 @@ class VirtualMemory:
         Mem.Space = self.Space
         Mem.PageList = self.PageList
         return Mem
+
+    def FindProcess(self, process): # encontra indice das paginas virtuais do processo
+
+        IndexList = []
+
+        for index, page in np.ndenumerate(self.PageList):
+            
+            if page.Process == process:
+                IndexList.append(index[0])
+
+
+        return np.array(IndexList)

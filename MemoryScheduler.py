@@ -11,25 +11,39 @@ class MemoryScheduler:
     #Escalonamento
     def FIFO(self,Mem, VMen, Process):
         
-        ProcessPages = np.where(VMen == Process)
+        IndexProcessPages = VMen.FindProcess(Process)
 
-        if VMen[ProcessPages[0][0]].RamAdress != -1: # processo ja esta na memoria
+        if VMen.PageList[IndexProcessPages[0]].RamAdress != -1: # processo ja esta na memoria
             return
 
         if Mem.EmptyPagesNum >= Process.MemoryPages: # a memoria tem espaço vazio
             for i in range(50):
                 if Mem.PageList[i].Process == None: # quando encontrar o primeiro espaço vazio
                     j = 0
-                    for page in ProcessPages[0]: # liga as paginas na memoria virtual para a real e coloca o processo na real
-                        VMen[page].RamAdress = i+j
+                    for page in IndexProcessPages: # liga as paginas na memoria virtual e na real e coloca o processo na real
+                        VMen.PageList[page].RamAdress = i+j
                         Mem.PageList[i+j].Process = Process
                         Mem.PageList[i+j].RencentlyUsed = 50 - j
-                        j += 1    
+                        Mem.PageList[i+j].VirtualMemoryAddress = page
+                        j += 1   
+                    Mem.EmptyPagesNum -= Process.MemoryPages
                 return  
             
         # se chegou até aqui a memoria ta cheia e o processo não ta nela
-        while nao tem espaço na memoria:
-            # criar função que remove processo da memoria e ja compacta ela
+        while Mem.EmptyPagesNum < Process.MemoryPages:
+
+            # por padrão estou colocando o que chegou primeiro no começo, já que é o fifo
+            # e os ultimos vao ser colocados no fim
+
+        
+            Mem.RemoveProcess(Mem.PageList[0].Process)
+
+            # --------------------------------------------------------------------------------------------------------------------------#
+            # Falta adcionar swap                                                                                                       #
+            # RemoveProcess nao guarda no disco                                                                                         #
+            # Não acho que é necessario guardar no disco, pois todas as informações que a gente precisa tão guardados no processo em si #
+            # - Fernando                                                                                                                # 
+            #---------------------------------------------------------------------------------------------------------------------------#
 
 
         return
@@ -37,3 +51,24 @@ class MemoryScheduler:
     def LRU(self,Mem, VMen, Process):
 
         return
+
+
+if __name__ == "__main__":
+
+    ProcessA = Process.process(0,4,7,0,5,1)
+    ProcessB = Process.process(2,2,3,0,5,2)
+    ProcessC = Process.process(4,1,5,0,5,3)
+    ProcessD = Process.process(6,3,10,0,5,4)
+
+
+    ProcessArray = np.array([ProcessA,ProcessB,ProcessC,ProcessD,])
+
+    scheduler = MemoryScheduler()
+    Mem = Memory.Memory()
+    VMem = VirtualMemory.VirtualMemory(ProcessArray)
+
+    scheduler.FIFO(Mem, VMem, ProcessB)
+
+    print("a")
+    print("a")
+    print("a")
